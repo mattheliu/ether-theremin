@@ -22,7 +22,7 @@ const roots = [
   'tests',
   'scripts',
   'README.md',
-  'README.en.md',
+  'README.zh-CN.md',
   'CONTRIBUTING.md',
   'LICENSE',
   'THIRD_PARTY_NOTICES.md',
