@@ -64,6 +64,8 @@ export function registerInstrumentTools(
           reverb: { type: 'number', minimum: 0, maximum: 100 },
           tone: { type: 'string', enum: ['classic', 'pure', 'hollow'] },
           quantize: { type: 'boolean' },
+          melody: { type: 'boolean' },
+          scale: { type: 'string', enum: ['pentatonic', 'major'] },
           compatibility: { type: 'boolean' },
           inputDeviceId: { type: 'string' },
         },
@@ -92,10 +94,17 @@ export function registerInstrumentTools(
                 !engine.snapshot().inputs?.some((d) => d.id === value))
             )
               throw new Error('Select an available microphone.');
+          } else if (key === 'scale') {
+            if (value !== 'pentatonic' && value !== 'major')
+              throw new Error('Unknown scale.');
           } else if (key === 'tone') {
             if (!['classic', 'pure', 'hollow'].includes(String(value)))
               throw new Error('Unknown tone.');
-          } else if (key === 'quantize' || key === 'compatibility') {
+          } else if (
+            key === 'quantize' ||
+            key === 'compatibility' ||
+            key === 'melody'
+          ) {
             if (typeof value !== 'boolean')
               throw new Error(`${key} must be boolean.`);
           } else throw new Error('Unknown setting.');

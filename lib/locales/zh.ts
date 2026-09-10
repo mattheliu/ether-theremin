@@ -92,6 +92,33 @@ export const zh = {
     free: '自由滑音',
     touchInstruction:
       '按住演奏区，左右控制音高，上下控制音量；松开淡出。也可按住空格，用方向键演奏。',
+    response: '演奏响应',
+    melodyMode: '旋律',
+    gestureMode: '手势',
+    melodyHelp:
+      '推近升调，拉远降调；停手保音 2.2 秒后轻柔淡出。音域 C4–C5，小幅移动就好。',
+    gestureHelp: '完整音域 C3–C6，响应更快，停手即淡出。',
+    pentatonic: 'C 五声音阶',
+    scaleLabel: '音阶',
+    rest: '收音',
+    restHelp: '结束当前音，挥手继续；声纳保持开启。',
+    coachTitle: '先听，再奏一小段。',
+    coachIntro:
+      '原创八音练习 · 示范 80 BPM。跟练按你的速度：找到亮起的音，稳住约半秒，再进入下一音。',
+    listenPhrase: '听示范',
+    stopDemo: '停止示范',
+    practice: '开始跟练',
+    practiceAgain: '再练一次',
+    finishPractice: '结束跟练',
+    coachReady: '先听示范，再开启声纳。跟练会启用旋律模式和五声音阶。',
+    practiceStart: '开启声纳后，奏出亮起的音。',
+    practiceHigher: '轻推手掌，升到目标音。',
+    practiceLower: '轻拉手掌，降到目标音。',
+    practiceHold: '保持这个音，让它停留片刻。',
+    practiceSound: '轻轻挥手，让这个音响起来。',
+    practiceDone: '这一句完成了。再试一次，把每个音连得更柔和。',
+    demoHelp: '示范只播放琴声，不使用麦克风。先停止演奏即可试听。',
+    targetNote: '目标音',
     gestureTitle: '先静止，再挥手。',
     gestureInstruction:
       '允许麦克风后，保持静止完成校准。手掌推近升调，拉远降调；停手后声音淡出。',
@@ -138,6 +165,11 @@ export const zh = {
       '挥动手掌，让空气奏出旋律。以太是一台中英双语的声纳特雷门琴，用电脑扬声器与麦克风感知手势，探索声音与特雷门琴的百年起源。',
   },
   messages: {
+    melodyCalibrated:
+      '校准完成。小幅推拉调音，停手保音 2.2 秒。试试下方八音练习。',
+    melodyPlaying: '小幅推近升调，拉远降调；停手保音，点击收音结束当前音。',
+    demoPlaying: '正在试听八音短句。无需麦克风，Escape 随时停止。',
+    demoFinished: '示范结束。开启声纳，试着奏出这段旋律。',
     inputChanged: '麦克风或探测频段已更改，请重新开启声纳。',
     virtualInput:
       '当前接入的是虚拟音频设备，无法直接听到房间里的声波。请在麦克风选项中选择内置麦克风；若列表只有虚拟设备，请用 Mac 上的 Chrome 或 Safari 打开此页面。',

@@ -19,7 +19,7 @@ A sonar theremin for your browser.
 Your speakers send a tone. Your microphone picks up its reflections. Move your hand, and ETHER turns the Doppler shift into music.
 
 - **Play without touching.** Hand motion shapes continuous pitch using your computer’s speakers and microphone.
-- **Find your sound.** Adjust tone, glide and reverb, with optional C-major scale assist.
+- **Find your sound.** Adjust tone, glide and reverb, with C pentatonic, C major or free pitch.
 - **Choose your input.** Select a microphone and see what calibration actually detects.
 - **Keep audio on your device.** Microphone audio is processed locally, without recording or uploading.
 
@@ -42,12 +42,25 @@ Open the localhost URL printed in the terminal. Microphone capture requires HTTP
 
 1. Use built-in speakers and a physical microphone, without headphones.
 2. Start sonar, grant microphone access, and remain still until calibration finishes.
-3. Move your palm toward the speakers to raise pitch and away to lower it. Sound fades when motion stops.
+3. Move your palm toward the speakers to raise pitch and away to lower it. Melody response holds the note for 2.2 seconds when motion stops, then fades gently. Its C4–C5 range and slower response make small movements easier to control.
 4. Adjust tone, glide, reverb and scale assist. Stop, Escape or moving the page into the background releases the microphone and stops the probe.
 
 The microphone selector lets you choose a specific input. Automatic mode tries a built-in microphone if the default is a recognized virtual input. Browsers may hide device labels before permission is granted.
 
 System volume and Probe level control the sensing tone; Output volume controls only the music. Calibration tests 18.5–21 kHz by default. The optional compatibility band tries 16–18 kHz only after the high band fails. These tones may be audible to people or pets. Start quietly and stop if uncomfortable.
+
+## Play your first melody
+
+**Melody response + C pentatonic** is the starting preset. It uses C, D, E, G and A, with note-boundary hysteresis to reduce jitter. Gesture response restores the faster C3–C6 range and quick fade; select Free pitch to play continuous glides without snapping.
+
+1. Click **Listen** before starting sonar to hear the original eight-note phrase. It plays at 80 BPM without microphone access; Stop and Escape cancel it.
+2. Start sonar and click **Follow along**. Practice selects Melody response and C pentatonic.
+3. Move gently toward the speakers to rise, away to fall. Hold each highlighted note for about half a second; practice follows your pace.
+4. Use **End note** to create a rest without recalibrating. The next detected motion sounds the instrument again. Stop releases the microphone.
+
+The phrase is `C4 E4 G4 A4 | G4 E4 D4 C4`. A4 and the final C4 last two beats in the demo. The guide tracks stable notes, not rhythmic accuracy. Melody mode remains motion-based and does not measure hand distance.
+
+For musical phrasing and traditional playing technique, see [Carolina Eyck’s tutorials](https://www.carolinaeyck.com/method) and [Lydia Kavina’s lessons](https://www.lydiakavina.com/learn). Their antenna-based finger positions do not map directly to this sonar controller.
 
 ## Diagnostics and privacy
 
@@ -98,6 +111,8 @@ Contributions are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for audio life
 - `components/`: diagnostics, instrument history and used UI primitives.
 - `lib/instrument.ts`: audio, device selection and lifecycle.
 - `lib/signal.ts`: signal processing and pitch integration.
+- `lib/melody.ts`: stable scale snapping, sustain envelope and shared practice score.
+- `components/melody-coach.tsx`: audition controls and guided note practice.
 - `lib/locales/zh.ts` and `en.ts`: UI, metadata, statuses and errors.
 - `lib/instrument-errors.ts`: browser failures mapped to stable message keys.
 - `lib/webmcp.ts`: optional structured browser tools.

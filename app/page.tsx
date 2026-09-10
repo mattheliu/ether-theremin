@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import { ThereminOrigins } from '@/components/theremin-origins';
 import { SonarDiagnosticsPanel } from '@/components/sonar-diagnostics';
+import { MelodyCoach } from '@/components/melody-coach';
 import { useEffect, useRef, useState } from 'react';
 import {
   Hand,
@@ -508,6 +509,40 @@ export default function Home() {
               {localizeMessage(state.message, language)}
             </output>
           </div>
+          {mode === 'sonar' && (
+            <div className="melody-response">
+              <div
+                className="response-choices"
+                role="group"
+                aria-label={t.response}
+              >
+                <button
+                  type="button"
+                  aria-pressed={settings.melody}
+                  onClick={() => change('melody', true)}
+                >
+                  {t.melodyMode}
+                </button>
+                <button
+                  type="button"
+                  aria-pressed={!settings.melody}
+                  onClick={() => change('melody', false)}
+                >
+                  {t.gestureMode}
+                </button>
+                <button
+                  type="button"
+                  className="rest-button"
+                  title={t.restHelp}
+                  disabled={!state.running || state.demoStep !== null}
+                  onClick={() => instrument.current?.rest()}
+                >
+                  {t.rest}
+                </button>
+              </div>
+              <p>{settings.melody ? t.melodyHelp : t.gestureHelp}</p>
+            </div>
+          )}
           <div className="parameters">
             <div className="tone-select">
               <label id="tone-label" htmlFor="tone">
@@ -547,18 +582,57 @@ export default function Home() {
               value={settings.reverb}
               onChange={(v) => change('reverb', v)}
             />
-            <div className="quantize">
-              <label htmlFor="quantize">{t.quantize}</label>
-              <div>
-                <Switch
-                  id="quantize"
-                  checked={settings.quantize}
-                  onCheckedChange={(v) => change('quantize', v)}
-                />
-                <span>{settings.quantize ? t.major : t.free}</span>
-              </div>
+            <div className="tone-select scale-select">
+              <label htmlFor="musical-scale">{t.scaleLabel}</label>
+              <Select
+                value={settings.quantize ? settings.scale : 'free'}
+                items={[
+                  { value: 'pentatonic', label: t.pentatonic },
+                  { value: 'major', label: t.major },
+                  { value: 'free', label: t.free },
+                ]}
+                onValueChange={(v) => {
+                  if (v === 'pentatonic' || v === 'major' || v === 'free')
+                    setSettings((s) => ({
+                      ...s,
+                      quantize: v !== 'free',
+                      scale: v === 'free' ? s.scale : v,
+                    }));
+                }}
+              >
+                <SelectTrigger id="musical-scale">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="pentatonic">{t.pentatonic}</SelectItem>
+                  <SelectItem value="major">{t.major}</SelectItem>
+                  <SelectItem value="free">{t.free}</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
           </div>
+          {mode === 'sonar' && (
+            <MelodyCoach
+              state={state}
+              language={language}
+              onAudition={() => {
+                void instrument.current?.audition();
+              }}
+              onStop={() => instrument.current?.stop()}
+              onPreset={() => {
+                instrument.current?.rest();
+                setSettings((s) => ({
+                  ...s,
+                  melody: true,
+                  scale: 'pentatonic',
+                  quantize: true,
+                  glide: 24,
+                  reverb: 28,
+                  tone: 'classic',
+                }));
+              }}
+            />
+          )}
         </section>
       </section>
       <section className="sonar-panel" aria-label={t.gestureTitle}>
@@ -567,7 +641,11 @@ export default function Home() {
           <div>
             <h2>{t.gestureTitle}</h2>
             <p>
-              {mode === 'sonar' ? t.gestureInstruction : t.touchInstruction}
+              {mode === 'sonar'
+                ? settings.melody
+                  ? t.melodyHelp
+                  : t.gestureInstruction
+                : t.touchInstruction}
             </p>
           </div>
         </div>

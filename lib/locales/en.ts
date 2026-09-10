@@ -98,6 +98,37 @@ export const en = {
     free: 'Free pitch',
     touchInstruction:
       'Hold the field. Move sideways for pitch and vertically for volume. Release to fade out. You can also hold Space and use the arrow keys.',
+    response: 'Playing response',
+    melodyMode: 'Melody',
+    gestureMode: 'Gesture',
+    melodyHelp:
+      'Move toward to rise, away to fall. Hold a note for 2.2 seconds at rest, then fade gently. Range C4–C5; use small movements.',
+    gestureHelp:
+      'Full C3–C6 range, faster response, and a quick fade when you stop moving.',
+    pentatonic: 'C pentatonic',
+    scaleLabel: 'Scale',
+    rest: 'End note',
+    restHelp: 'End this note; move again to continue. Sonar stays on.',
+    coachTitle: 'Listen. Then play a little phrase.',
+    coachIntro:
+      'Original phrase · demo at 80 BPM. Practice at your pace: reach the highlighted note and hold for about half a second to advance.',
+    listenPhrase: 'Listen',
+    stopDemo: 'Stop demo',
+    practice: 'Follow along',
+    practiceAgain: 'Try again',
+    finishPractice: 'End practice',
+    coachReady:
+      'Listen first, then start sonar. Practice enables Melody response and C pentatonic.',
+    practiceStart: 'Start sonar, then play the highlighted note.',
+    practiceHigher: 'Move gently toward the speakers to reach the note.',
+    practiceLower: 'Move gently away from the speakers to reach the note.',
+    practiceHold: 'Keep this note steady for a moment.',
+    practiceSound: 'Move gently to sound this note.',
+    practiceDone:
+      'Phrase complete. Try again and connect the notes more gently.',
+    demoHelp:
+      'The demo plays music without using the microphone. Stop playing before listening.',
+    targetNote: 'Target note',
     gestureTitle: 'Stillness. Then movement.',
     gestureInstruction:
       'Allow microphone access and stay still for calibration. Move toward the speakers to raise the pitch, away to lower it. The sound fades when you stop moving.',
@@ -145,6 +176,13 @@ export const en = {
       'Move your hand and give the air a melody. ETHER is a bilingual sonar theremin using your speakers and microphone to sense gestures, with a brief history of the instrument.',
   },
   messages: {
+    melodyCalibrated:
+      'Calibrated. Move gently to change pitch; rest to hold for 2.2 seconds. Try the eight-note phrase below.',
+    melodyPlaying:
+      'Move gently toward to rise, away to fall. Rest to sustain; End note silences this phrase.',
+    demoPlaying:
+      'Playing the eight-note demo without a microphone. Escape stops anytime.',
+    demoFinished: 'Demo finished. Start sonar and try the phrase yourself.',
     inputChanged: 'The microphone or probe band changed. Start sonar again.',
     virtualInput:
       'The selected input is a virtual audio device and cannot directly hear sound in the room. Select the built-in microphone. If only virtual devices are listed, open this page in Chrome or Safari on your Mac.',

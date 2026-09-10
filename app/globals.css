@@ -508,6 +508,125 @@ kbd {
   gap: 22px 25px;
   padding-top: 21px;
 }
+.melody-response {
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+}
+.response-choices {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.response-choices button,
+.coach-button {
+  min-height: 36px;
+  padding: 7px 12px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-size: 14px;
+  color: var(--foreground);
+  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  cursor: pointer;
+}
+.response-choices button[aria-pressed='true'] {
+  color: var(--primary);
+  border-color: var(--primary);
+  background: var(--surface);
+}
+.response-choices .rest-button {
+  margin-left: auto;
+}
+.melody-response p,
+.melody-coach p {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--muted-foreground);
+  margin-top: 12px;
+}
+.melody-coach {
+  border-top: 1px solid var(--border);
+  padding-top: 22px;
+  margin-top: 24px;
+}
+.coach-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+.coach-heading h2 {
+  font-size: 17px;
+  line-height: 1.5;
+  margin: 0;
+}
+.coach-heading button {
+  flex-shrink: 0;
+}
+.phrase-notes {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  gap: 5px;
+  list-style: none;
+  padding: 0;
+  margin: 17px 0;
+}
+.phrase-notes li {
+  text-align: center;
+  padding: 12px 2px 6px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 14px;
+}
+.phrase-notes small {
+  display: block;
+  color: var(--muted-foreground);
+}
+.phrase-notes .current {
+  color: var(--primary);
+  border-color: var(--primary);
+  box-shadow: inset 0 -3px var(--primary);
+}
+.phrase-notes .complete {
+  color: var(--primary);
+}
+.coach-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.coach-hint {
+  min-height: 24px;
+}
+.melody-coach > small {
+  display: block;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--muted-foreground);
+  margin-top: 8px;
+}
+.coach-button:disabled,
+.response-choices button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.coach-button:focus-visible,
+.response-choices button:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 3px;
+}
+@media (max-width: 420px) {
+  .phrase-notes {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .coach-heading {
+    align-items: flex-start;
+  }
+}
 .parameter {
   min-width: 0;
 }

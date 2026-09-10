@@ -1,12 +1,18 @@
 import type { MessageKey } from './i18n';
 import { InstrumentError, errorMessageKey } from './instrument-errors';
 import {
+  snapPitch,
+  sonarPitch,
+  sonarAmplitude,
+  phraseAt,
+  PHRASE_BPM,
+  type Scale,
+} from './melody';
+import {
   clamp,
   midiToHz,
-  quantizeMidi,
   dbToPower,
   detectMotion,
-  movePitch,
   medianSpectrum,
   evaluateCarrier,
   carrierFrequencies,
@@ -20,6 +26,8 @@ export type Settings = {
   probe: number;
   tone: string;
   quantize: boolean;
+  scale: Scale;
+  melody: boolean;
   compatibility: boolean;
   inputDeviceId: string;
 };
@@ -44,18 +52,21 @@ export type InstrumentState = {
   amplitude: number;
   confidence: number;
   carrier: number;
+  demoStep: number | null;
   message: MessageKey;
   diagnostics?: SonarDiagnostics;
   inputs?: { id: string; label: string }[];
 };
 export const DEFAULT_SETTINGS: Settings = {
   volume: 22,
-  glide: 38,
+  glide: 24,
   reverb: 28,
   sensitivity: 55,
   probe: 35,
   tone: 'classic',
-  quantize: false,
+  quantize: true,
+  scale: 'pentatonic',
+  melody: true,
   compatibility: false,
   inputDeviceId: 'auto',
 };
@@ -66,6 +77,7 @@ export const INITIAL_STATE: InstrumentState = {
   amplitude: 0,
   confidence: 0,
   carrier: 0,
+  demoStep: null,
   message: 'sonarReady',
 };
 
@@ -91,6 +103,8 @@ export class Instrument {
   private suspendTimer?: ReturnType<typeof setTimeout>;
   private disposed = false;
   private freeMidi = 60;
+  private snappedMidi?: number;
+  private resting = false;
   private lastUi = 0;
   private settings: Settings = { ...DEFAULT_SETTINGS };
   private state: InstrumentState = { ...INITIAL_STATE };
@@ -110,6 +124,18 @@ export class Instrument {
   configure(settings: Settings) {
     const previous = this.settings;
     this.settings = settings;
+    if (
+      previous.quantize !== settings.quantize ||
+      previous.scale !== settings.scale ||
+      previous.melody !== settings.melody
+    )
+      this.snappedMidi = undefined;
+    if (
+      previous.melody !== settings.melody &&
+      settings.melody &&
+      this.mode === 'sonar'
+    )
+      this.freeMidi = clamp(this.freeMidi, 60, 72);
     if (
       (previous.compatibility !== settings.compatibility ||
         previous.inputDeviceId !== settings.inputDeviceId) &&
@@ -136,7 +162,11 @@ export class Instrument {
         0.08,
       );
     if (previous.tone !== settings.tone) this.setTone();
-    if (previous.quantize !== settings.quantize)
+    if (
+      previous.quantize !== settings.quantize ||
+      previous.scale !== settings.scale ||
+      previous.melody !== settings.melody
+    )
       this.play(this.freeMidi, this.state.amplitude);
   }
   private setTone() {
@@ -215,6 +245,7 @@ export class Instrument {
     this.stop();
     const epoch = this.epoch;
     this.mode = mode;
+    this.freeMidi = 60;
     this.emit({
       phase: 'requesting',
       diagnostics: undefined,
@@ -492,7 +523,7 @@ export class Instrument {
       running: true,
       phase: 'playing',
       midi: 60,
-      message: 'calibrated',
+      message: this.settings.melody ? 'melodyCalibrated' : 'calibrated',
     });
     let previous = performance.now(),
       lastMotion = 0,
@@ -528,18 +559,30 @@ export class Instrument {
       );
       consecutive = motion.strength > 0.08 ? consecutive + 1 : 0;
       if (consecutive >= 3) {
-        this.freeMidi = movePitch(this.freeMidi, motion, dt);
+        this.freeMidi = sonarPitch(
+          this.freeMidi,
+          motion,
+          dt,
+          this.settings.melody,
+        );
+        this.resting = false;
         lastMotion = now;
         lastSignal = now;
-        heldAmplitude = clamp(0.22 + motion.strength * 0.65);
+        heldAmplitude = this.settings.melody
+          ? 0.5 + motion.strength * 0.12
+          : clamp(0.22 + motion.strength * 0.65);
       }
-      const amplitude =
-        now - lastMotion < 140
-          ? heldAmplitude
-          : heldAmplitude * Math.exp(-(now - lastMotion - 140) / 190);
-      const message = now - lastSignal > 10000 ? 'noGesture' : 'sonarPlaying';
+      const amplitude = this.resting
+        ? 0
+        : sonarAmplitude(heldAmplitude, now - lastMotion, this.settings.melody);
+      const message =
+        now - lastSignal > 10000
+          ? 'noGesture'
+          : this.settings.melody
+            ? 'melodyPlaying'
+            : 'sonarPlaying';
       this.emit({ confidence: motion.strength, message }, true);
-      this.play(this.freeMidi, amplitude < 0.01 ? 0 : amplitude, true);
+      this.play(this.freeMidi, amplitude, true);
       this.frame = requestAnimationFrame(tick);
     };
     this.frame = requestAnimationFrame(tick);
@@ -548,9 +591,10 @@ export class Instrument {
     if (!this.ctx || !this.state.running) return;
     this.freeMidi = clamp(midi, 48, 84);
     const note = this.settings.quantize
-        ? quantizeMidi(this.freeMidi)
+        ? snapPitch(this.freeMidi, this.settings.scale, this.snappedMidi)
         : this.freeMidi,
       amp = clamp(amplitude);
+    this.snappedMidi = this.settings.quantize ? note : undefined;
     this.oscillator?.frequency.setTargetAtTime(
       midiToHz(note),
       this.ctx.currentTime,
@@ -558,6 +602,44 @@ export class Instrument {
     );
     this.envelope?.gain.setTargetAtTime(amp * 0.6, this.ctx.currentTime, 0.025);
     this.emit({ midi: note, amplitude: amp }, throttle);
+  }
+  /** End the current phrase without releasing the calibrated microphone. */
+  rest() {
+    this.resting = true;
+    this.release();
+  }
+  /** Explicit user audition, using the same voice, without requesting a microphone. */
+  async audition() {
+    this.stop();
+    const epoch = this.epoch;
+    this.emit({ phase: 'requesting', demoStep: 0, message: 'startingAudio' });
+    try {
+      await this.ensureAudio();
+      this.check(epoch);
+      this.master!.gain.setTargetAtTime(
+        (this.settings.volume / 100) * 0.45,
+        this.ctx!.currentTime,
+        0.04,
+      );
+      this.emit({ running: true, phase: 'playing', message: 'demoPlaying' });
+      const started = performance.now();
+      const tick = (now: number) => {
+        if (epoch !== this.epoch || !this.state.running) return;
+        const note = phraseAt(((now - started) * PHRASE_BPM) / 60000);
+        if (!note) {
+          this.stop('demoFinished');
+          return;
+        }
+        this.emit({ demoStep: note.index }, true);
+        this.play(note.midi, note.sounding ? 0.54 : 0, true);
+        this.frame = requestAnimationFrame(tick);
+      };
+      this.frame = requestAnimationFrame(tick);
+    } catch (error) {
+      if (epoch !== this.epoch || this.disposed) return;
+      this.stop();
+      this.emit({ phase: 'error', message: errorMessageKey(error) });
+    }
   }
   release() {
     if (this.ctx)
@@ -568,6 +650,8 @@ export class Instrument {
     this.epoch++;
     cancelAnimationFrame(this.frame);
     this.frame = 0;
+    this.resting = false;
+    this.snappedMidi = undefined;
     this.stream?.getTracks().forEach((t) => t.stop());
     this.stream = undefined;
     try {
@@ -598,6 +682,7 @@ export class Instrument {
       phase: 'off',
       confidence: 0,
       carrier: 0,
+      demoStep: null,
       message,
     });
   }

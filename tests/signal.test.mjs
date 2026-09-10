@@ -469,3 +469,152 @@ test('cancelling automatic device switching releases the late physical microphon
   assert.equal(engine.snapshot().running, false);
   engine.dispose();
 });
+
+function animationClock() {
+  const original = {
+    performance: globalThis.performance,
+    request: globalThis.requestAnimationFrame,
+    cancel: globalThis.cancelAnimationFrame,
+  };
+  let now = 0,
+    id = 0;
+  const callbacks = new Map();
+  Object.defineProperty(globalThis, 'performance', {
+    configurable: true,
+    value: { now: () => now },
+  });
+  globalThis.requestAnimationFrame = (callback) => {
+    callbacks.set(++id, callback);
+    return id;
+  };
+  globalThis.cancelAnimationFrame = (key) => callbacks.delete(key);
+  return {
+    tick(time) {
+      now = time;
+      const frame = [...callbacks.values()];
+      callbacks.clear();
+      frame.forEach((callback) => callback(time));
+    },
+    pending: () => callbacks.size,
+    restore() {
+      Object.defineProperty(globalThis, 'performance', {
+        configurable: true,
+        value: original.performance,
+      });
+      globalThis.requestAnimationFrame = original.request;
+      globalThis.cancelAnimationFrame = original.cancel;
+    },
+  };
+}
+
+test('live sonar holds a detected note, supports a rest, and releases capture on signal loss', async () => {
+  const { engine, stopped } = setupCalibration();
+  const clock = animationClock();
+  try {
+    await engine.start('sonar');
+    let moving = true,
+      carrierPresent = true;
+    engine.micAnalyser.getFloatFrequencyData = (array) => {
+      array.fill(-120);
+      const bin = Math.round(engine.snapshot().carrier / (48000 / 4096));
+      if (carrierPresent) array[bin] = -82;
+      if (moving) array[bin + 12] = -90;
+    };
+    clock.tick(16);
+    clock.tick(32);
+    clock.tick(48);
+    const amplitude = engine.snapshot().amplitude;
+    assert.ok(amplitude > 0.45);
+    moving = false;
+    clock.tick(2000);
+    assert.equal(engine.snapshot().amplitude, amplitude);
+    const note = engine.snapshot().midi;
+    engine.rest();
+    clock.tick(2100);
+    assert.equal(engine.snapshot().amplitude, 0);
+    assert.equal(stopped(), 0);
+    moving = true;
+    clock.tick(2120);
+    clock.tick(2140);
+    clock.tick(2160);
+    assert.ok(engine.snapshot().amplitude > 0.45);
+    assert.ok(engine.snapshot().midi >= note);
+    moving = false;
+    carrierPresent = false;
+    clock.tick(2200);
+    clock.tick(3900);
+    assert.equal(engine.snapshot().message, 'signalLost');
+    assert.equal(stopped(), 1);
+    assert.equal(clock.pending(), 0);
+  } finally {
+    engine.dispose();
+    clock.restore();
+  }
+});
+
+test('audition needs no microphone, plays the score, ends, and can be stopped immediately', async () => {
+  let captures = 0;
+  Object.defineProperty(globalThis, 'navigator', {
+    configurable: true,
+    value: {
+      mediaDevices: {
+        getUserMedia() {
+          captures++;
+          throw new Error('Unexpected capture');
+        },
+      },
+    },
+  });
+  const clock = animationClock(),
+    engine = new Instrument(() => {});
+  try {
+    await engine.audition();
+    clock.tick(0);
+    assert.equal(engine.snapshot().midi, 60);
+    assert.ok(engine.snapshot().amplitude > 0);
+    clock.tick(800);
+    assert.equal(engine.snapshot().midi, 64);
+    assert.equal(engine.snapshot().demoStep, 1);
+    engine.stop('paused');
+    clock.tick(1200);
+    assert.equal(engine.snapshot().running, false);
+    assert.equal(engine.snapshot().amplitude, 0);
+    assert.equal(engine.snapshot().demoStep, null);
+    assert.equal(clock.pending(), 0);
+    await engine.audition();
+    clock.tick(1201);
+    clock.tick(9000);
+    assert.equal(engine.snapshot().message, 'demoFinished');
+    assert.equal(engine.snapshot().running, false);
+    assert.equal(captures, 0);
+  } finally {
+    engine.dispose();
+    clock.restore();
+  }
+});
+
+test('cancelling an audition while audio is resuming cannot start it later', async () => {
+  const engine = new Instrument(() => {}),
+    clock = animationClock();
+  let resolve;
+  const ensure = engine.ensureAudio.bind(engine);
+  engine.ensureAudio = async () => {
+    await ensure();
+    await new Promise((r) => {
+      resolve = r;
+    });
+  };
+  try {
+    const pending = engine.audition();
+    await new Promise((r) => setTimeout(r, 0));
+    engine.stop();
+    resolve();
+    await pending;
+    assert.equal(engine.snapshot().running, false);
+    assert.equal(engine.snapshot().demoStep, null);
+    assert.equal(clock.pending(), 0);
+  } finally {
+    engine.dispose();
+    clock.restore();
+  }
+});
