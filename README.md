@@ -32,7 +32,7 @@ The interface supports Chinese and English, with Chinese selected initially. Tou
 Try the [live demo](https://ether-theremin-lzx-0909.leonliuzx.chatgpt.site/), or run locally with **Node.js 22.13+** and npm. No account, API key or cloud configuration is needed locally.
 
 ```sh
-git clone https://github.com/mattheliu/ether-theremin.git
+git clone https://github.com/openaigames/ether-theremin.git
 cd ether-theremin
 npm ci
 npm run dev

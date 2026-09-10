@@ -32,7 +32,7 @@
 打开[在线体验](https://ether-theremin-lzx-0909.leonliuzx.chatgpt.site/)，或使用 **Node.js 22.13+** 和 npm 在本地运行。本地运行无需账号、API 密钥或云服务配置。
 
 ```sh
-git clone https://github.com/mattheliu/ether-theremin.git
+git clone https://github.com/openaigames/ether-theremin.git
 cd ether-theremin
 npm ci
 npm run dev
