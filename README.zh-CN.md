@@ -128,7 +128,8 @@ npm run export:source -- ../ether-theremin-source
 
 感谢让这个实验成为可能的创作者与项目：
 
-- **[Emanuel Perez · @emanperez28](https://x.com/emanperez28/status/2097476030680244361)**：在 X 分享的声纳隔空滚动演示，启发了用手掌运动演奏浏览器乐器的想法。
+- **[Emanuel Perez · @emanperez28](https://x.com/emanperez28/status/2097476030680244361)**：在 X 分享的声纳隔空滚动演示，启发了 ETHER 的声学手势交互。
+- **[Thomas Kellogg · @oldnickels](https://x.com/oldnickels/status/2097563247046217944)**：提出做一台特雷门琴的点子，为 ETHER 的乐器方向提供了直接启发。
 - **[Daniel Rapp · doppler](https://github.com/DanielRapp/doppler)**：在浏览器中实现声学多普勒运动检测；ETHER 改编了其中以 MIT 许可发布的频带算法。
 - **[SoundWave · CHI 2012](https://www.microsoft.com/en-us/research/publication/soundwave-using-doppler-effect-sense-gestures/)**：使用扬声器和麦克风感知手势的研究基础。
 

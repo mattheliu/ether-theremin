@@ -124,7 +124,8 @@ The allowlisted export excludes Git history, deployment bindings, dependencies, 
 
 Thank you to the people who made this experiment possible:
 
-- **[Emanuel Perez · @emanperez28](https://x.com/emanperez28/status/2097476030680244361)** — the sonar scrolling demo on X that sparked the idea of turning hand motion into a browser instrument.
+- **[Emanuel Perez · @emanperez28](https://x.com/emanperez28/status/2097476030680244361)** — the sonar scrolling demo on X that inspired ETHER’s acoustic gesture control.
+- **[Thomas Kellogg · @oldnickels](https://x.com/oldnickels/status/2097563247046217944)** — the suggestion to make a theremin, which inspired ETHER’s musical direction.
 - **[Daniel Rapp · doppler](https://github.com/DanielRapp/doppler)** — the browser implementation of acoustic Doppler motion sensing, and the MIT-licensed bandwidth algorithm adapted in ETHER.
 - **[SoundWave · CHI 2012](https://www.microsoft.com/en-us/research/publication/soundwave-using-doppler-effect-sense-gestures/)** — the research foundation for sensing gestures with speakers and a microphone.
 
