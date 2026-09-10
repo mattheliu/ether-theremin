@@ -1,0 +1,185 @@
+export const zh = {
+  ui: {
+    chooseMicrophone: '麦克风',
+    autoMicrophone: '自动选择内置麦克风',
+    microphoneHelp:
+      '授权后可选择具体设备。请选择 MacBook Pro 麦克风等实体输入，避免 Cast Audio、Loopback 等虚拟输入。',
+    trackMuted: '麦克风轨道暂时无数据',
+    trackEnabled: '麦克风轨道启用',
+    audioState: '音频引擎状态',
+    running: '运行中',
+    suspended: '已暂停',
+    closed: '已关闭',
+    interrupted: '被系统中断',
+    compatibility: '兼容频段',
+    compatibilityHelp:
+      '高频校准失败时，追加测试 16 至 18 kHz，可能听到尖细的探测音。请从较低系统音量开始，如不适立即停止。',
+    probeHelp: '系统音量与“探测音量”决定探测音强度；“输出音量”只控制琴声。',
+    diagnosticsTitle: '声纳校准诊断',
+    diagnosticsEmpty: '开启声纳后，这里会显示实际的麦克风和频率检测结果。',
+    inputDevice: '实际麦克风',
+    inputRate: '麦克风采样率',
+    contextRate: '音频处理采样率',
+    inputLevel: '本次最高输入电平',
+    echoCancellation: '回声消除',
+    noiseSuppression: '降噪',
+    autoGainControl: '自动增益',
+    enabled: '开启',
+    disabled: '关闭',
+    unknown: '浏览器未报告',
+    testingFrequency: '正在测试',
+    frequency: '探测频率',
+    receivedLevel: '接收电平',
+    rise: '相对背景提升',
+    snr: '信噪比',
+    stable: '稳定帧',
+    result: '结果',
+    usable: '可用',
+    insufficient: '不足',
+    diagnosticsHelp:
+      '这些数据只保留在当前页面。电平是数字音频值，不代表人耳听到的响度。“关闭”仅表示浏览器报告的设置，不能排除 macOS 或设备自身的音频处理。',
+    macHelp:
+      'Mac 排查：系统设置 → 声音，将输入和输出都选为内置设备；麦克风使用期间，在菜单栏检查麦克风模式，关闭语音隔离。',
+    macHelpLink: 'Apple 麦克风模式说明',
+    title: '以太 ETHER · 特雷门琴',
+    play: '演奏',
+    history: '起源',
+    language: '界面语言',
+    theme: '切换明暗主题',
+    heading: '触不到的，\n也能奏响。',
+    subtitle: '声纳特雷门琴',
+    intro: '扬声器发出声波，麦克风感知回声。\n挥动手掌，让空气奏出旋律。',
+    artAlt: '悬空的手靠近银色特雷门琴天线，细微光迹环绕其间',
+    artCredit: '声波意象 · AI 艺术创作',
+    console: '特雷门琴演奏台',
+    modes: '演奏方式',
+    sonar: '声纳演奏',
+    touch: '触控备用',
+    playing: '演奏中',
+    calibrating: '校准中',
+    standby: '待机',
+    spectrum: '实时回声频谱',
+    touchField: '触控演奏区',
+    pitch: '当前音高',
+    sonarAria:
+      '声纳回声频谱。开启后，在电脑扬声器附近推拉手掌演奏，Escape 停止。',
+    touchAria:
+      '演奏区域。按住鼠标或触屏，左右调音高，上下调音量。键盘按住空格发声，方向键调节，Escape 停止。',
+    invitation: '把手，变成一段旋律',
+    touchInvitation: '指尖划过，空气发声',
+    wait: '保持手和电脑静止，等待校准完成',
+    hardware: '使用电脑内置扬声器与麦克风',
+    touchHint: '开始后，在这里按住并滑动',
+    echo: '回声强度',
+    volumeAxis: '音量',
+    away: '−500 Hz / 拉远',
+    carrier: '载频',
+    toward: '+500 Hz / 推近',
+    stop: '停止演奏',
+    cancel: '取消校准',
+    startSonar: '开启声纳',
+    start: '开始演奏',
+    escape: '随时停止',
+    tone: '音色',
+    classic: '经典',
+    pure: '纯音',
+    hollow: '空灵',
+    volume: '输出音量',
+    glide: '滑音',
+    reverb: '空间混响',
+    quantize: '音阶辅助',
+    major: 'C 大调',
+    free: '自由滑音',
+    touchInstruction:
+      '按住演奏区，左右控制音高，上下控制音量；松开淡出。也可按住空格，用方向键演奏。',
+    gestureTitle: '先静止，再挥手。',
+    gestureInstruction:
+      '允许麦克风后，保持静止完成校准。手掌推近升调，拉远降调；停手后声音淡出。',
+    probe: '探测音量',
+    sensitivity: '手势灵敏度',
+    signal: '运动信号',
+    waiting: '等待校准',
+    recalibrate: '重新校准',
+    recalibrateAria: '重新校准声纳',
+    sonarNote:
+      '请使用内置扬声器，勿戴耳机。调整探测音量后建议重新校准。麦克风仅在本机处理，不录音、不上传。高频声可能被部分人或宠物听到；如不适请停止。',
+    originHeading: '一双手，\n一百年的回响。',
+    originIntro:
+      '在键盘与合成器普及之前，一件没有琴弦、无需触碰的乐器，已经让电子声音登上舞台。',
+    inventionTitle: '从物理实验中诞生',
+    invention:
+      '约 1920 年，俄罗斯发明家列夫·特尔明（Léon Theremin）创造了特雷门琴。这件乐器后来以他的姓氏命名。',
+    patentTitle: '声音有了新的可能',
+    patent:
+      '1928 年 2 月 28 日，特尔明的声音生成方法与装置获得美国专利 US1661058A。',
+    rcaTitle: '走出实验室',
+    rca: '1929 年，RCA 将特雷门琴商品化。木制琴身上伸出两根天线，双手分别控制音高与音量。',
+    rcaAlt: '约 1930 年 RCA 特雷门琴：木制琴身、竖直音高天线与环形音量天线',
+    rcaCaption: 'RCA Victor 特雷门琴，1929 至 1930 年',
+    photoCredit: '摄影：David Thompson / Museums Victoria',
+    museum: '查看馆藏',
+    artistTitle: '让它真正歌唱的人',
+    artist:
+      '克拉拉·洛克莫尔（Clara Rockmore）发展出精细的空中指法，将连续滑音化为准确的音符与乐句，拓展了特雷门琴的古典音乐表现力。',
+    artistLink: '了解 Clara Rockmore',
+    connectionHeading: '从电场，来到声波。',
+    connection:
+      '传统特雷门琴通过手与天线之间的电容变化感应位置。这台浏览器乐器借用它的连续滑音表达，以多普勒回声感知手的运动：推近升调，拉远降调。',
+    limitation:
+      '这里感知的是运动，不是绝对距离，也无法独立定位两只手。声纳效果取决于扬声器、麦克风和环境反射。',
+    sourceLabel: '研究与实现',
+    lowVolume: '从较低音量开始，听见细微的变化。',
+    back: '回到演奏',
+    foundation: 'Bob Moog 基金会',
+    patentLink: '原始专利',
+    navigation: '页面导航',
+    inventionDate: '约 1920',
+    description:
+      '挥动手掌，让空气奏出旋律。以太是一台中英双语的声纳特雷门琴，用电脑扬声器与麦克风感知手势，探索声音与特雷门琴的百年起源。',
+  },
+  messages: {
+    inputChanged: '麦克风或探测频段已更改，请重新开启声纳。',
+    virtualInput:
+      '当前接入的是虚拟音频设备，无法直接听到房间里的声波。请在麦克风选项中选择内置麦克风；若列表只有虚拟设备，请用 Mac 上的 Chrome 或 Safari 打开此页面。',
+    sampleRateTooLow:
+      '麦克风采样率不足以探测此频段。请使用内置麦克风，关闭蓝牙耳机或语音通话模式。',
+    inputSilent:
+      '麦克风输入几乎静音。请检查输入设备、输入音量和硬件静音开关，再重新校准。',
+    processingEnabled:
+      '麦克风仍启用了回声消除或降噪，可能过滤探测音。请关闭语音隔离或音频增强，再重新校准。',
+    probeMissing:
+      '麦克风有输入，但两个频段均未收到稳定探测音。请检查系统扬声器音量、输出设备及麦克风模式，查看下方诊断。',
+    highBandMissing:
+      '麦克风有输入，但高频探测音不足。请检查系统扬声器音量与输出设备，也可开启下方兼容频段再试。',
+    sonarReady: '使用内置扬声器，点击开启声纳，允许麦克风后保持静止。',
+    touchReady: '点击开始后，按住演奏区滑动。',
+    paused: '已暂停。点击开始继续演奏。',
+    requestMicrophone: '请允许麦克风，开始声纳校准。',
+    startingAudio: '正在启动声音…',
+    touchPlaying: '按住演奏区，左右变调，上下调节音量。',
+    permissionDenied:
+      '麦克风未获允许。请在浏览器中允许麦克风，或切换触控演奏。',
+    microphoneMissing: '没有找到麦克风，请连接麦克风或使用触控演奏。',
+    microphoneBusy: '麦克风被其他程序占用，请关闭占用程序后重试。',
+    startFailed: '暂时无法启动，请重试或切换触控演奏。',
+    insecureContext:
+      '当前页面无法使用麦克风。请在 HTTPS 页面或 localhost 上打开。',
+    microphoneDisconnected: '麦克风已断开。连接后可重新开启声纳。',
+    searchingEcho: '正在寻找清晰的回声…',
+    measuringBackground: '请保持静止，正在测量背景信号…',
+    calibrated: '校准完成。手掌推近升调，拉远降调；停手后声音淡出。',
+    signalLost: '声纳信号丢失，请检查扬声器与麦克风后重新开启。',
+    noGesture:
+      '暂未识别到手势。试着在扬声器上方 10 至 30 cm 推拉手掌，或重新校准。',
+    sonarPlaying: '手掌推近升调，拉远降调；停手后声音淡出。',
+    stopped: '已停止。点击开始，再奏一段。',
+    inputUnavailable: '选中的麦克风已不可用。请重新选择输入设备，再开启声纳。',
+  },
+} as const;
+
+// English and future locales must match every Chinese key.
+export type Locale = {
+  [Section in keyof typeof zh]: {
+    [Key in keyof (typeof zh)[Section]]: string;
+  };
+};
